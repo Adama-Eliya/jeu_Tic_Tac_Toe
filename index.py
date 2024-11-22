@@ -1,75 +1,40 @@
 # Auteur: AVLAH Adama Eliya
-# Date  : 29/09/2024 
+# Date  : 22/11/2024
 
-from adfonc import *   # importation de tous les fonctions du module adfonc
 
-print(fonc_bienvenu())   
+####################
+# Jeu du Tic Tac Toe
+####################
 
-joueur = name_joueur()     # récupération des noms des joueurs
-l = 3                       #  les dimension du tableau de jeu
-c = 3       
-grille = [[" " for i in range(c)] for i in range(l)]  # un tableau qui récupéres les symboles
-papier(grille)
-liste_coord = []
-x = 0
-diese = 30
-while True :
-      if x!= 0:
-            print(f"C'est votre tour {joueur[0]} ")
-      
-      liste2 = saisi_coordonnee()  # récupération des coordonnées des cases du tableaux
-      while True :
-            if liste2[0]> l-1 or liste2[1]> c - 1:
-                  print(f"{joueur[0]} les coordonnées saisis n'existent pas")  # vérifie si les coordonnées saisient existent !
-                  liste2 = saisi_coordonnee()
+
+if __name__ == '__main__':
+    # éxécuté qd ce module n'est pas initialisé par un import.
+    from adfonc import *
+    
+    print(fonc_bienvenu())
+    name_joueur = saisi_name()
+    affiche_message(name_joueur)
+    liste = init_grille(3)
+    grille = remplire_liste(liste)
+    affiche_grille(grille)
+    cpt = 0
+    liste = []
+    while cpt == 0:
+        i = 0
+        while i < 2 and not(gagne_hor(grille) or gagne_ver(grille) or gagne_dia1(grille) or gagne_dia2(grille) or grille_rempli(grille)):
+            num = saisi_joueur(name_joueur[i],liste)
+            liste.append(num)
+            if i == 0:
+                saisi_in_grille(grille,num,'X')
             else:
-                  break
-            
-      if tuple(liste2) in liste_coord:
-            print("Coordonnée deja saisi !")  # vérifie si les coordonnées sont déja saisi !!
-            continue
-      else:
-            liste_coord.append(tuple(liste2)) # ajout des coordonnées saisient à la liste des coordonnées déja saisient
-      
-      grille[liste2[0]][liste2[1]] = 'X'
-      papier(grille)             # affichage du tableau de jeux
-      if gagner_hor(grille,l,c) or gagne_dia(grille,c) or gagne_ver(grille):
-            print(f"{joueur[0]} vous avez gagner le jeux")
-            break
-      else:                                                           # verifie le resultat du jeu
-            if len(liste_coord) == 9:
-                  print("Match Null")
-                  break
-            
-            
-      print("#"*diese)
-      # partie du joueur 2
-      print(f"C'est votre tour {joueur[1]}")
-      liste3 = saisi_coordonnee()
-      while True :
-            if liste3[0]> l-1 or liste3[1]> c - 1:
-                  print(f"{joueur[1]}les coordonnées saisis n'existent pas")
-                  liste2 = saisi_coordonnee()
-            else:
-                  break
-      if tuple(liste3) in liste_coord:
-            print("Coordonnée deja saisi !")
-            continue
-      else:
-            liste_coord.append(tuple(liste3))
+                saisi_in_grille(grille,num,'O')
+            affiche_grille(grille)
+            j= i
+            i += 1
 
-      grille[liste3[0]][liste3[1]] = 'O'
-      papier(grille)
-      if gagner_hor(grille,l,c) or gagne_dia(grille,c) or gagne_ver(grille):
-            print(f"{joueur[1]} vous avez gagner le jeux")
-            break
-      else:
-            if len(liste_coord) == 9:
-                  print("Match Null")
-                  break      
-      x = 1
-      print("#"*diese)
-
-           
-
-
+        if grille_rempli(grille):
+            print("Vous avez fait un match null.")
+            cpt = 1
+        elif i < 2:
+            cpt = 1
+            affiche_gagnant(name_joueur[j])   
